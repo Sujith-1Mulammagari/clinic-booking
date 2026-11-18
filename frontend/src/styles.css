@@ -1,0 +1,37 @@
+:root {
+  --ink: #17313b; --muted: #5d737c; --bg: #f3f8f7; --card: #ffffff;
+  --line: #d3e2df; --brand: #0f766e; --brand-dark: #0b5953; --danger: #b42318;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--ink);
+  font-family: "Segoe UI", system-ui, -apple-system, sans-serif; line-height: 1.5; }
+header { background: var(--brand); color: #fff; padding: 20px 16px; }
+header h1 { margin: 0; font-size: 1.5rem; }
+header p { margin: 2px 0 0; opacity: .85; }
+nav { display: flex; gap: 8px; max-width: 720px; margin: 16px auto 0; padding: 0 16px; }
+nav button { flex: 1; padding: 10px; border: 1px solid var(--line); background: var(--card);
+  border-radius: 8px; font-size: 1rem; cursor: pointer; color: var(--ink); }
+nav button.on { background: var(--brand); color: #fff; border-color: var(--brand); }
+main { max-width: 720px; margin: 16px auto 48px; padding: 0 16px; }
+.card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 20px; }
+label { display: block; font-weight: 600; margin: 14px 0 4px; }
+input, select, textarea { width: 100%; padding: 10px; border: 1px solid var(--line);
+  border-radius: 8px; font: inherit; background: #fff; }
+:focus-visible { outline: 3px solid #5eead4; outline-offset: 1px; }
+.slots { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px; }
+.slots button { padding: 8px 14px; border: 1px solid var(--line); background: #fff;
+  border-radius: 8px; cursor: pointer; font: inherit; }
+.slots button.on { background: var(--brand); color: #fff; border-color: var(--brand); }
+.primary { margin-top: 20px; width: 100%; padding: 12px; background: var(--brand); color: #fff;
+  border: 0; border-radius: 8px; font-size: 1rem; font-weight: 600; cursor: pointer; }
+.primary:hover { background: var(--brand-dark); }
+.primary:disabled { opacity: .5; cursor: not-allowed; }
+.msg { margin-top: 14px; padding: 10px 12px; border-radius: 8px; }
+.err { background: #fef3f2; color: var(--danger); }
+.ok { background: #ecfdf3; color: #067647; }
+.muted { color: var(--muted); }
+table { width: 100%; border-collapse: collapse; margin-top: 12px; font-size: .95rem; }
+th, td { text-align: left; padding: 8px 6px; border-bottom: 1px solid var(--line); vertical-align: top; }
+.scroll { overflow-x: auto; }
+.del { background: none; border: 1px solid var(--danger); color: var(--danger);
+  border-radius: 6px; padding: 4px 10px; cursor: pointer; }
