@@ -11,7 +11,8 @@ async function api(path, options = {}) {
   return res.status === 204 ? null : res.json();
 }
 
-const today = () => new Date().toISOString().slice(0, 10);
+// const today = () => new Date().toISOString().slice(0, 10);
+const today = () => new Date().toLocaleDateString("en-CA");
 
 function Book() {
   const empty = { patientName: "", phone: "", doctor: "", appointmentDate: today(), slot: "", reason: "" };
