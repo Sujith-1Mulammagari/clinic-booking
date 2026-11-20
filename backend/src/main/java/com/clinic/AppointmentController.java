@@ -1,5 +1,6 @@
 package com.clinic;
-
+import java.time.LocalTime;
+import java.time.ZoneId;
 import jakarta.validation.Valid;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
@@ -31,6 +32,8 @@ public class AppointmentController {
 
     @Value("${app.admin-key}")
     private String adminKey;
+    @Value("${app.timezone:Asia/Kolkata}")
+    private String timezone;
 
     public AppointmentController(AppointmentRepository repo) {
         this.repo = repo;
@@ -46,7 +49,8 @@ public class AppointmentController {
                                   @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
         Set<String> taken = repo.findByDoctorAndAppointmentDate(doctor, date).stream()
             .map(a -> a.slot).collect(Collectors.toSet());
-        return SLOTS.stream().filter(s -> !taken.contains(s)).toList();
+        return SLOTS.stream().filter(s -> !taken.contains(s) && !inPast(date, s)).toList();
+        // return SLOTS.stream().filter(s -> !taken.contains(s)).toList();
     }
 
     @PostMapping("/appointments")
@@ -55,7 +59,7 @@ public class AppointmentController {
         if (!DOCTORS.contains(a.doctor) || !SLOTS.contains(a.slot)) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Choose a valid doctor and time slot.");
         }
-        if (a.appointmentDate.isBefore(LocalDate.now())) {
+        if (inPast(a.appointmentDate,a.slot)) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Choose today or a future date.");
         }
         a.id = null;
@@ -79,7 +83,12 @@ public class AppointmentController {
         auth(key);
         repo.deleteById(id);
     }
-
+    private boolean inPast(LocalDate date, String slot) {
+        ZoneId zone = ZoneId.of(timezone);
+        LocalDate today = LocalDate.now(zone);
+        if (date.isBefore(today)) return true;
+        return date.equals(today) && !LocalTime.parse(slot).isAfter(LocalTime.now(zone));
+    }
     private void auth(String key) {
         boolean ok = key != null && MessageDigest.isEqual(
             key.getBytes(StandardCharsets.UTF_8), adminKey.getBytes(StandardCharsets.UTF_8));
